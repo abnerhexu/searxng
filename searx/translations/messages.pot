@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: SearXNG -\n"
+"Project-Id-Version: SearXNG VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-02-22 13:48+0000\n"
+"POT-Creation-Date: 2026-03-04 19:55+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,19 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.18.0\n"
+
+#: searx/decorators.py:15
+msgid "Please log in to access this page."
+msgstr ""
+
+#: searx/decorators.py:18
+msgid "Admin privileges required."
+msgstr ""
+
+#: searx/limiter.py:180
+#, python-format
+msgid "IP is on BLOCKLIST - %(msg)s"
+msgstr ""
 
 #. CONSTANT_NAMES['NO_SUBGROUPING']
 #: searx/searxng.msg
@@ -58,7 +71,7 @@ msgid "videos"
 msgstr ""
 
 #. CATEGORY_NAMES['RADIO']
-#: searx/engines/radio_browser.py:142 searx/searxng.msg
+#: searx/engines/radio_browser.py:146 searx/searxng.msg
 msgid "radio"
 msgstr ""
 
@@ -528,29 +541,53 @@ msgstr ""
 msgid "answered"
 msgstr ""
 
-#: searx/webapp.py:327
+#: searx/webapp.py:353
 msgid "No item found"
 msgstr ""
 
-#: searx/engines/qwant.py:296
-#: searx/templates/simple/result_templates/images.html:23 searx/webapp.py:329
+#: searx/engines/qwant.py:291
+#: searx/templates/simple/result_templates/images.html:23 searx/webapp.py:355
 msgid "Source"
 msgstr ""
 
-#: searx/webapp.py:331
+#: searx/webapp.py:357
 msgid "Error loading the next page"
 msgstr ""
 
-#: searx/webapp.py:480 searx/webapp.py:881
+#: searx/webapp.py:506 searx/webapp.py:1038
 msgid "Invalid settings, please edit your preferences"
 msgstr ""
 
-#: searx/webapp.py:496
+#: searx/webapp.py:529
 msgid "Invalid settings"
 msgstr ""
 
-#: searx/webapp.py:573 searx/webapp.py:663
+#: searx/webapp.py:606 searx/webapp.py:696
 msgid "search error"
+msgstr ""
+
+#: searx/webapp.py:920
+msgid "All fields are required"
+msgstr ""
+
+#: searx/webapp.py:923
+msgid "Username already exists"
+msgstr ""
+
+#: searx/webapp.py:926
+msgid "Email already exists"
+msgstr ""
+
+#: searx/webapp.py:947
+msgid "Account is disabled"
+msgstr ""
+
+#: searx/webapp.py:952
+msgid "Invalid username or password"
+msgstr ""
+
+#: searx/webapp.py:948 searx/webapp.py:979
+msgid "Verification failed, please try again"
 msgstr ""
 
 #: searx/webutils.py:36
@@ -628,6 +665,10 @@ msgstr ""
 msgid "Compute {func} of the arguments"
 msgstr ""
 
+#: searx/botdetection/_helpers.py:54
+msgid "Too Many Requests"
+msgstr ""
+
 #: searx/engines/openstreetmap.py:155
 msgid "Show route in map .."
 msgstr ""
@@ -641,19 +682,19 @@ msgstr ""
 msgid "This entry has been superseded by"
 msgstr ""
 
-#: searx/engines/qwant.py:298
+#: searx/engines/qwant.py:293
 msgid "Channel"
 msgstr ""
 
-#: searx/engines/radio_browser.py:144
+#: searx/engines/radio_browser.py:148
 msgid "bitrate"
 msgstr ""
 
-#: searx/engines/radio_browser.py:145
+#: searx/engines/radio_browser.py:149
 msgid "votes"
 msgstr ""
 
-#: searx/engines/radio_browser.py:146
+#: searx/engines/radio_browser.py:150
 msgid "clicks"
 msgstr ""
 
@@ -681,15 +722,15 @@ msgstr ""
 msgid "The image could not be downloaded."
 msgstr ""
 
-#: searx/engines/zlibrary.py:78
+#: searx/engines/zlibrary.py:79
 msgid "Language"
 msgstr ""
 
-#: searx/engines/zlibrary.py:79
+#: searx/engines/zlibrary.py:80
 msgid "Book rating"
 msgstr ""
 
-#: searx/engines/zlibrary.py:80
+#: searx/engines/zlibrary.py:81
 msgid "File quality"
 msgstr ""
 
@@ -842,36 +883,65 @@ msgstr ""
 msgid "Preferences"
 msgstr ""
 
+#: searx/templates/simple/base.html:62
+msgid "History"
+msgstr ""
+
+#: searx/templates/simple/admin/users.html:11
+#: searx/templates/simple/base.html:64
+msgid "Admin"
+msgstr ""
+
+#: searx/templates/simple/base.html:66
+msgid "Logout"
+msgstr ""
+
+#: searx/templates/simple/account/login.html:2
+#: searx/templates/simple/account/login.html:5
+#: searx/templates/simple/account/login.html:18
+#: searx/templates/simple/account/register.html:24
 #: searx/templates/simple/base.html:68
+msgid "Login"
+msgstr ""
+
+#: searx/templates/simple/account/login.html:20
+#: searx/templates/simple/account/register.html:2
+#: searx/templates/simple/account/register.html:5
+#: searx/templates/simple/account/register.html:22
+#: searx/templates/simple/base.html:69
+msgid "Register"
+msgstr ""
+
+#: searx/templates/simple/base.html:80
 msgid "Powered by"
 msgstr ""
 
-#: searx/templates/simple/base.html:68
+#: searx/templates/simple/base.html:80
 msgid "a privacy-respecting, open metasearch engine"
 msgstr ""
 
-#: searx/templates/simple/base.html:69
+#: searx/templates/simple/base.html:81
 #: searx/templates/simple/result_templates/packages.html:59
 msgid "Source code"
 msgstr ""
 
-#: searx/templates/simple/base.html:70
+#: searx/templates/simple/base.html:82
 msgid "Issue tracker"
 msgstr ""
 
-#: searx/templates/simple/base.html:71 searx/templates/simple/stats.html:18
+#: searx/templates/simple/base.html:83 searx/templates/simple/stats.html:18
 msgid "Engine stats"
 msgstr ""
 
-#: searx/templates/simple/base.html:73
+#: searx/templates/simple/base.html:85
 msgid "Public instances"
 msgstr ""
 
-#: searx/templates/simple/base.html:76
+#: searx/templates/simple/base.html:88
 msgid "Privacy policy"
 msgstr ""
 
-#: searx/templates/simple/base.html:79
+#: searx/templates/simple/base.html:91
 msgid "Contact instance maintainer"
 msgstr ""
 
@@ -1117,6 +1187,104 @@ msgstr ""
 
 #: searx/templates/simple/stats.html:121
 msgid "Code"
+msgstr ""
+
+#: searx/templates/simple/account/history.html:2
+#: searx/templates/simple/account/history.html:5
+msgid "Search History"
+msgstr ""
+
+#: searx/templates/simple/account/history.html:8
+msgid "Clear all history?"
+msgstr ""
+
+#: searx/templates/simple/account/history.html:8
+msgid "Clear All"
+msgstr ""
+
+#: searx/templates/simple/account/history.html:13
+msgid "Query"
+msgstr ""
+
+#: searx/templates/simple/account/history.html:14
+msgid "Time"
+msgstr ""
+
+#: searx/templates/simple/account/history.html:15
+msgid "Action"
+msgstr ""
+
+#: searx/templates/simple/account/history.html:25
+msgid "Delete"
+msgstr ""
+
+#: searx/templates/simple/account/history.html:33
+msgid "No search history"
+msgstr ""
+
+#: searx/templates/simple/account/login.html:11
+#: searx/templates/simple/account/register.html:11
+#: searx/templates/simple/admin/users.html:9
+msgid "Username"
+msgstr ""
+
+#: searx/templates/simple/account/login.html:15
+#: searx/templates/simple/account/register.html:19
+msgid "Password"
+msgstr ""
+
+#: searx/templates/simple/account/login.html:20
+msgid "Don't have an account?"
+msgstr ""
+
+#: searx/templates/simple/account/register.html:15
+#: searx/templates/simple/admin/users.html:10
+msgid "Email"
+msgstr ""
+
+#: searx/templates/simple/account/register.html:24
+msgid "Already have an account?"
+msgstr ""
+
+#: searx/templates/simple/admin/users.html:2
+#: searx/templates/simple/admin/users.html:5
+msgid "User Management"
+msgstr ""
+
+#: searx/templates/simple/admin/users.html:12
+msgid "Status"
+msgstr ""
+
+#: searx/templates/simple/admin/users.html:13
+msgid "Created"
+msgstr ""
+
+#: searx/templates/simple/admin/users.html:14
+msgid "Actions"
+msgstr ""
+
+#: searx/templates/simple/admin/users.html:23
+msgid "Active"
+msgstr ""
+
+#: searx/templates/simple/admin/users.html:23
+msgid "Disabled"
+msgstr ""
+
+#: searx/templates/simple/admin/users.html:27
+msgid "Disable"
+msgstr ""
+
+#: searx/templates/simple/admin/users.html:27
+msgid "Enable"
+msgstr ""
+
+#: searx/templates/simple/admin/users.html:31
+msgid "Revoke Admin"
+msgstr ""
+
+#: searx/templates/simple/admin/users.html:31
+msgid "Make Admin"
 msgstr ""
 
 #: searx/templates/simple/answer/translations.html:12

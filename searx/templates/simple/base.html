@@ -57,6 +57,18 @@
           <a href="{{ url_for('preferences') }}" class="link_on_top_preferences">{{ icon_big('settings') }}<span>{{ _('Preferences') }}</span></a>
         {%- endif -%}
       {%- endblock -%}
+      {%- block linkto_account -%}
+        {%- if current_user.is_authenticated -%}
+          <a href="{{ url_for('history') }}" class="link_on_top_history">{{ icon_big('time') }}<span>{{ _('History') }}</span></a>
+          {%- if current_user.is_admin -%}
+          <a href="{{ url_for('admin_users') }}" class="link_on_top_admin">{{ icon_big('people') }}<span>{{ _('Admin') }}</span></a>
+          {%- endif -%}
+          <a href="{{ url_for('logout') }}" class="link_on_top_logout">{{ icon_big('log-out') }}<span>{{ _('Logout') }} ({{ current_user.username }})</span></a>
+        {%- else -%}
+          <a href="{{ url_for('login') }}" class="link_on_top_login">{{ icon_big('log-in') }}<span>{{ _('Login') }}</span></a>
+          <a href="{{ url_for('register') }}" class="link_on_top_register">{{ icon_big('person-add') }}<span>{{ _('Register') }}</span></a>
+        {%- endif -%}
+      {%- endblock -%}
     </nav>
     {% block header %}
     {% endblock %}
@@ -65,13 +77,9 @@
   </main>
   <footer>
     <p>
-    {{ _('Powered by') }} <a href="{{ url_for('info', pagename='about') }}">SearXNG</a> - {{ searx_version }} — {{ _('a privacy-respecting, open metasearch engine') }}<br>
-        <a href="{{ searx_git_url }}">{{ _('Source code') }}</a>
+    {{ _('基于SearXNG进行修改并遵守AGPL-3.0协议开源') }}<br>
+        <a href="https://github.com/abnerhexu/searxng">{{ _('源代码') }}</a>
         | <a href="{{ get_setting('brand.issue_url') }}">{{ _('Issue tracker') }}</a>
-        {% if enable_metrics %}| <a href="{{ url_for('stats') }}">{{ _('Engine stats') }}</a>{% endif %}
-        {% if get_setting('brand.public_instances') %}
-        | <a href="{{ get_setting('brand.public_instances') }}">{{ _('Public instances') }}</a>
-        {% endif %}
         {% if get_setting('general.privacypolicy_url') %}
         | <a href="{{ get_setting('general.privacypolicy_url') }}">{{ _('Privacy policy') }}</a>
         {% endif %}
@@ -83,5 +91,6 @@
         {% endfor %}
     </p>
   </footer>
+  {% block scripts %}{% endblock %}
 </body>
 </html>

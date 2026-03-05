@@ -45,6 +45,7 @@ from flask_babel import (
     gettext,
     format_decimal,
 )
+from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 
 import searx
 from searx.extended_types import sxng_request
@@ -151,6 +152,26 @@ app.jinja_env.add_extension('jinja2.ext.loopcontrols')  # pylint: disable=no-mem
 app.jinja_env.filters['group_engines_in_tab'] = group_engines_in_tab  # pylint: disable=no-member
 app.secret_key = settings['server']['secret_key']
 
+# Database configuration
+data_dir = settings.get('general', {}).get('data_dir', os.path.join(os.path.dirname(__file__), '..', 'data'))
+os.makedirs(data_dir, exist_ok=True)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(data_dir, 'users.db')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Initialize extensions
+from searx.models import db, User
+from searx import userdb, decorators
+
+db.init_app(app)
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+
+@login_manager.user_loader
+def load_user(user_id):
+    return userdb.get_user_by_id(int(user_id))
+
 
 def get_locale():
     locale = localeselector()
@@ -159,6 +180,11 @@ def get_locale():
 
 
 babel = Babel(app, locale_selector=get_locale)
+
+# Create database tables
+with app.app_context():
+    db.create_all()
+
 
 
 def _get_browser_language(req, lang_list):
@@ -479,6 +505,13 @@ def pre_request():
         logger.exception(e, exc_info=True)
         sxng_request.errors.append(gettext('Invalid settings, please edit your preferences'))
 
+    # Load preferences from database for logged-in users
+    if current_user.is_authenticated:
+        try:
+            preferences.load_from_db(current_user.id)
+        except Exception as e:  # pylint: disable=broad-except
+            logger.exception(e, exc_info=True)
+
     # merge GET, POST vars
     # HINT request.form is of type werkzeug.datastructures.ImmutableMultiDict
     sxng_request.form = dict(sxng_request.form.items())  # type: ignore
@@ -750,6 +783,21 @@ def search():
     max_response_time = engine_timings[0].total if engine_timings else None
     engine_timings_pairs = [(timing.engine, timing.total) for timing in engine_timings]
 
+    # Save search history for logged-in users
+    if current_user.is_authenticated and output_format == 'html':
+        try:
+            engines_str = ','.join([ref.name for ref in search_query.engineref_list]) if search_query.engineref_list else None
+            userdb.add_search_history(
+                current_user.id,
+                search_query.query,
+                engines=engines_str,
+                language=search_query.lang,
+                safe_search=search_query.safesearch,
+                results_count=result_container.number_of_results
+            )
+        except Exception as e:
+            logger.exception('Failed to save search history: %s', e)
+
     # search_query.lang contains the user choice (all, auto, en, ...)
     # when the user choice is "auto", search.search_query.lang contains the detected language
     # otherwise it is equals to search_query.lang
@@ -855,6 +903,154 @@ def autocompleter():
 
     suggestions = escape(suggestions, False)
     return Response(suggestions, mimetype=mimetype)
+
+
+def verify_turnstile(token: str, remote_ip: str = None) -> bool:
+    """Verify Cloudflare Turnstile response"""
+    if not settings['turnstile']['enabled']:
+        return True
+
+    secret_key = settings['turnstile'].get('secret_key', '')
+    if not secret_key or not token:
+        return False
+
+    try:
+        data = {
+            'secret': secret_key,
+            'response': token,
+        }
+        if remote_ip:
+            data['remoteip'] = remote_ip
+
+        response = httpx.post(
+            'https://challenges.cloudflare.com/turnstile/v0/siteverify',
+            data=data,
+            timeout=5.0
+        )
+        result = response.json()
+        return result.get('success', False)
+    except Exception:
+        logger.exception('Turnstile verification failed')
+        return False
+
+
+@app.route('/account/register', methods=['GET', 'POST'])
+def register():
+    """User registration"""
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+
+    if sxng_request.method == 'POST':
+        turnstile_token = sxng_request.form.get('cf-turnstile-response')
+        remote_ip = sxng_request.remote_addr
+        if not verify_turnstile(turnstile_token, remote_ip):
+            return render('account/register.html', error=gettext('Verification failed, please try again'))
+
+        username = sxng_request.form.get('username', '').strip()
+        email = sxng_request.form.get('email', '').strip()
+        password = sxng_request.form.get('password', '')
+
+        if not username or not email or not password:
+            return render('account/register.html', error=gettext('All fields are required'))
+
+        if userdb.get_user_by_username(username):
+            return render('account/register.html', error=gettext('Username already exists'))
+
+        if userdb.get_user_by_email(email):
+            return render('account/register.html', error=gettext('Email already exists'))
+
+        userdb.create_user(username, email, password)
+        return redirect(url_for('login'))
+
+    return render('account/register.html')
+
+
+@app.route('/account/login', methods=['GET', 'POST'])
+def login():
+    """User login"""
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+
+    if sxng_request.method == 'POST':
+        turnstile_token = sxng_request.form.get('cf-turnstile-response')
+        remote_ip = sxng_request.remote_addr
+        if not verify_turnstile(turnstile_token, remote_ip):
+            return render('account/login.html', error=gettext('Verification failed, please try again'))
+
+        username = sxng_request.form.get('username', '').strip()
+        password = sxng_request.form.get('password', '')
+
+        user = userdb.get_user_by_username(username)
+        if user and user.check_password(password):
+            if not user.is_active:
+                return render('account/login.html', error=gettext('Account is disabled'))
+            login_user(user)
+            userdb.update_last_login(user.id)
+            return redirect(url_for('index'))
+
+        return render('account/login.html', error=gettext('Invalid username or password'))
+
+    return render('account/login.html')
+
+
+@app.route('/account/logout')
+@login_required
+def logout():
+    """User logout"""
+    logout_user()
+    return redirect(url_for('index'))
+
+
+@app.route('/account/history')
+@login_required
+def history():
+    """User search history"""
+    history_list = userdb.get_search_history(current_user.id)
+    return render('account/history.html', history=history_list)
+
+
+@app.route('/account/history/delete/<int:history_id>', methods=['POST'])
+@login_required
+def delete_history(history_id):
+    """Delete a search history entry"""
+    userdb.delete_search_history(current_user.id, history_id)
+    return redirect(url_for('history'))
+
+
+@app.route('/account/history/clear', methods=['POST'])
+@login_required
+def clear_history():
+    """Clear all search history"""
+    userdb.clear_search_history(current_user.id)
+    return redirect(url_for('history'))
+
+
+@app.route('/admin/users')
+@decorators.admin_required
+def admin_users():
+    """Admin user management"""
+    users = userdb.get_all_users()
+    return render('admin/users.html', users=users)
+
+
+@app.route('/admin/users/<int:user_id>/toggle', methods=['POST'])
+@decorators.admin_required
+def admin_toggle_user(user_id):
+    """Toggle user active status"""
+    user = userdb.get_user_by_id(user_id)
+    if user:
+        userdb.toggle_user_status(user_id, not user.is_active)
+    return redirect(url_for('admin_users'))
+
+
+@app.route('/admin/users/<int:user_id>/admin', methods=['POST'])
+@decorators.admin_required
+def admin_toggle_admin(user_id):
+    """Toggle user admin status"""
+    user = userdb.get_user_by_id(user_id)
+    if user and user.id != current_user.id:
+        userdb.set_admin_status(user_id, not user.is_admin)
+    return redirect(url_for('admin_users'))
 
 
 @app.route('/preferences', methods=['GET', 'POST'])

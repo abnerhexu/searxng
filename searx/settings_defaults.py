@@ -270,4 +270,9 @@ SCHEMA: dict[str, t.Any] = {
     'categories_as_tabs': SettingsValue(dict, CATEGORIES_AS_TABS),
     'engines': SettingsValue(list, []),
     'doi_resolvers': {},
+    'turnstile': {
+        'enabled': SettingsValue(bool, False),
+        'site_key': SettingsValue(str, ''),
+        'secret_key': SettingsValue(str, ''),
+    },
 }

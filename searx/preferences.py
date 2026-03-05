@@ -539,6 +539,20 @@ class Preferences:
             elif user_setting_name == 'tokens':
                 self.tokens.parse(user_setting)
 
+    def load_from_db(self, user_id: int):
+        """Load preferences from database for logged-in user"""
+        from searx import userdb
+        try:
+            prefs = userdb.get_all_user_preferences(user_id)
+            for key, value in prefs.items():
+                if key in self.key_value_settings and not self.key_value_settings[key].locked:
+                    try:
+                        self.key_value_settings[key].parse(value)
+                    except Exception:
+                        pass
+        except Exception:
+            pass
+
     def parse_form(self, input_data: dict[str, str]):
         """Parse formular (``<input>``) data from a ``flask.request.form``"""
         disabled_engines = []
@@ -577,6 +591,20 @@ class Preferences:
 
     def save(self, resp: flask.Response):
         """Save cookie in the HTTP response object"""
+        # Save to database if user is logged in
+        from flask_login import current_user
+        if current_user.is_authenticated:
+            from searx import userdb
+            for user_setting_name, user_setting in self.key_value_settings.items():
+                if self.key_value_settings[user_setting_name].locked:
+                    continue
+                try:
+                    value = user_setting.get_value()
+                    userdb.set_user_preference(current_user.id, user_setting_name, str(value))
+                except Exception:
+                    pass
+
+        # Also save to cookie for backward compatibility
         for user_setting_name, user_setting in self.key_value_settings.items():
             # pylint: disable=unnecessary-dict-index-lookup
             if self.key_value_settings[user_setting_name].locked:

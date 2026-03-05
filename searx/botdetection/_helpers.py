@@ -14,6 +14,7 @@ from ipaddress import (
 )
 import flask
 import werkzeug
+from flask_babel import gettext
 
 from searx import logger
 
@@ -50,7 +51,7 @@ def too_many_requests(network: IPv4Network | IPv6Network, log_msg: str) -> werkz
     """
 
     logger.debug("BLOCK %s: %s", network.compressed, log_msg)
-    return flask.make_response(('Too Many Requests', 429))
+    return flask.make_response((gettext('Too Many Requests'), 429))
 
 
 def get_network(real_ip: IPv4Address | IPv6Address, cfg: "config.Config") -> IPv4Network | IPv6Network:

@@ -2,6 +2,7 @@
 
 #main_index {
   margin-top: 26vh;
+  background-color: var(--md-sys-color-background);
 }
 
 .index {
@@ -23,20 +24,26 @@
   #search,
   #search_header {
     margin: 0 auto;
-    background: inherit;
-    border: inherit;
+    background: transparent;
+    border: none;
     padding: 0;
     display: block;
+    box-shadow: none;
+  }
+
+  .search_box {
+    max-width: 584px;
+    margin: 0 auto;
   }
 
   .search_filters {
     display: block;
     margin: 1em 0;
+    justify-content: center;
   }
 
   .category label {
     padding: 6px 10px;
-    border-bottom: initial !important;
   }
 }
 

@@ -1,0 +1,120 @@
+// Material Design 3 Component Styles
+
+// Buttons
+.md3-button {
+  height: 40px;
+  padding: 0 24px;
+  border-radius: 20px;
+  font-size: var(--md-sys-typescale-label-large-size);
+  font-weight: 500;
+  line-height: var(--md-sys-typescale-label-large-line-height);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
+  outline: none;
+
+  &:disabled {
+    opacity: 0.38;
+    cursor: not-allowed;
+  }
+}
+
+.md3-button-filled {
+  .md3-button();
+  background-color: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+
+  &:hover:not(:disabled) {
+    .elevation-1();
+  }
+
+  &:active:not(:disabled) {
+    .elevation-0();
+  }
+}
+
+.md3-button-outlined {
+  .md3-button();
+  background-color: transparent;
+  color: var(--md-sys-color-primary);
+  border: 1px solid var(--md-sys-color-outline);
+
+  &:hover:not(:disabled) {
+    background-color: rgba(26, 115, 232, 0.08);
+  }
+}
+
+.md3-button-text {
+  .md3-button();
+  background-color: transparent;
+  color: var(--md-sys-color-primary);
+
+  &:hover:not(:disabled) {
+    background-color: rgba(26, 115, 232, 0.08);
+  }
+}
+
+// Text fields
+.md3-text-field {
+  position: relative;
+
+  input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid var(--md-sys-color-outline);
+    border-radius: 4px;
+    background-color: transparent;
+    color: var(--md-sys-color-on-surface);
+    font-size: var(--md-sys-typescale-body-large-size);
+    transition: border-color 0.2s;
+
+    &:focus {
+      outline: none;
+      border-color: var(--md-sys-color-primary);
+      border-width: 2px;
+      padding: 11px 15px;
+    }
+
+    &::placeholder {
+      color: var(--md-sys-color-on-surface-variant);
+    }
+  }
+}
+
+// Cards
+.md3-card {
+  background-color: var(--md-sys-color-surface);
+  border-radius: 8px;
+  padding: 16px;
+  .elevation-1();
+  transition: box-shadow 0.2s;
+
+  &:hover {
+    .elevation-2();
+  }
+}
+
+// Chips
+.md3-chip {
+  display: inline-flex;
+  align-items: center;
+  height: 32px;
+  padding: 0 16px;
+  border-radius: 16px;
+  background-color: transparent;
+  border: 1px solid var(--md-sys-color-outline);
+  color: var(--md-sys-color-on-surface-variant);
+  font-size: var(--md-sys-typescale-label-large-size);
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: var(--md-sys-color-surface-variant);
+  }
+
+  &.selected {
+    background-color: var(--md-sys-color-primary-container);
+    color: var(--md-sys-color-on-primary-container);
+    border-color: transparent;
+  }
+}

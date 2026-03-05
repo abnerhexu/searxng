@@ -4,6 +4,10 @@
 
 @import (inline) "../../node_modules/normalize.css/normalize.css";
 @import "definitions.less";
+@import "md3-colors.less";
+@import "md3-typography.less";
+@import "md3-elevation.less";
+@import "md3-components.less";
 @import "mixins.less";
 @import "toolkit.less";
 @import "autocomplete.less";
@@ -15,6 +19,7 @@
 @import "stats.less";
 @import "result_templates.less";
 @import "weather.less";
+@import "account.less";
 
 // for index.html template
 @import "index.less";
@@ -51,12 +56,12 @@
 
 // Main LESS-Code
 html {
-  font-family: sans-serif;
+  font-family: var(--md-sys-font-family);
   font-size: 0.9em;
   .text-size-adjust;
 
-  color: var(--color-base-font);
-  background-color: var(--color-base-background);
+  color: var(--md-sys-color-on-background);
+  background-color: var(--md-sys-color-background);
   padding: 0;
   margin: 0;
 
@@ -99,8 +104,8 @@ footer {
   padding: 1rem 0;
   width: 100%;
   text-align: center;
-  background-color: var(--color-footer-background);
-  border-top: 1px solid var(--color-footer-border);
+  background-color: var(--md-sys-color-surface);
+  border-top: 1px solid var(--md-sys-color-outline-variant);
   overflow: hidden;
 
   p {
@@ -115,25 +120,18 @@ footer {
 input[type="submit"],
 #results button[type="submit"],
 .button {
-  padding: 0.7rem;
-  display: inline-block;
-  background: var(--color-btn-background);
-  color: var(--color-btn-font);
-  .rounded-corners;
-
-  border: 0;
-  cursor: pointer;
+  .md3-button-filled();
 }
 
 a {
   text-decoration: none;
-  color: var(--color-url-font);
+  color: var(--md-sys-color-primary);
 
   &:visited {
-    color: var(--color-url-visited-font);
+    color: var(--md-result-title-visited);
 
     .highlight {
-      color: var(--color-url-visited-font);
+      color: var(--md-result-title-visited);
     }
   }
 }
@@ -182,23 +180,30 @@ article[data-vim-selected].category-social {
 .result {
   margin: @results-margin 0;
   padding: @result-padding;
+  padding-bottom: 1.2rem;
   box-sizing: border-box;
   width: 100%;
-  .ltr-border-left(0.2rem solid transparent);
+  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: var(--md-result-hover-bg);
+  }
 
   h3 {
-    font-size: 1.2rem;
+    font-size: var(--md-sys-typescale-title-large-size);
+    line-height: var(--md-sys-typescale-title-large-line-height);
+    font-weight: var(--md-sys-typescale-title-large-weight);
     overflow-wrap: break-word;
-    margin: 0.4rem 0 0.4rem 0;
+    margin: 0.2rem 0 0.3rem 0;
     padding: 0;
 
     a {
-      color: var(--color-result-link-font);
+      color: var(--md-result-title);
       font-weight: normal;
-      font-size: 1.1em;
 
       &:visited {
-        color: var(--color-result-link-visited-font);
+        color: var(--md-result-title-visited);
       }
 
       &:focus,
@@ -218,15 +223,16 @@ article[data-vim-selected].category-social {
 
   .content,
   .stat {
-    font-size: 0.9em;
+    font-size: var(--md-sys-typescale-body-medium-size);
+    line-height: var(--md-sys-typescale-body-medium-line-height);
+    color: var(--md-result-text);
     margin: 0;
     padding: 0;
     max-width: 54em;
     overflow-wrap: break-word;
-    line-height: 1.24;
 
     .highlight {
-      color: var(--color-result-description-highlight-font);
+      color: var(--md-sys-color-on-surface);
       background: inherit;
       font-weight: bold;
     }
@@ -254,11 +260,12 @@ article[data-vim-selected].category-social {
   .url_wrapper {
     display: flex;
     align-items: center;
-    font-size: 1rem;
-    color: var(--color-result-url-font);
+    font-size: var(--md-sys-typescale-label-large-size);
+    line-height: var(--md-sys-typescale-label-large-line-height);
+    color: var(--md-result-url);
     flex-flow: row nowrap;
     overflow: hidden;
-    margin: 0;
+    margin: 0 0 0.3rem 0;
     padding: 0;
 
     .url_o1 {

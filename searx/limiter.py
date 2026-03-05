@@ -97,6 +97,7 @@ import sys
 
 from pathlib import Path
 import flask
+from flask_babel import gettext
 import werkzeug
 
 import searx.compat
@@ -176,7 +177,7 @@ def filter_request(request: SXNG_Request) -> werkzeug.Response | None:
     match, msg = ip_lists.block_ip(real_ip, cfg)
     if match:
         logger.error("BLOCK %s: matched BLOCKLIST - %s", network.compressed, msg)
-        return flask.make_response(('IP is on BLOCKLIST - %s' % msg, 429))
+        return flask.make_response((gettext('IP is on BLOCKLIST - %(msg)s') % {'msg': msg}, 429))
 
     # methods applied on all requests
 

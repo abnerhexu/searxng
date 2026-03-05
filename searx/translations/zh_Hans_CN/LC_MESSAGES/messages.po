@@ -2331,3 +2331,99 @@ msgstr "隐藏视频"
 #~ msgid "Comment(s)"
 #~ msgstr "注释"
 
+#: searx/webapp.py
+msgid "All fields are required"
+msgstr "所有字段均为必填项"
+
+#: searx/webapp.py
+msgid "Username already exists"
+msgstr "用户名已存在"
+
+#: searx/webapp.py
+msgid "Email already exists"
+msgstr "邮箱已被注册"
+
+#: searx/webapp.py
+msgid "Account is disabled"
+msgstr "账户已被禁用"
+
+#: searx/webapp.py
+msgid "Invalid username or password"
+msgstr "用户名或密码错误"
+
+#: searx/decorators.py
+msgid "Please log in to access this page."
+msgstr "请登录后访问此页面"
+
+#: searx/decorators.py
+msgid "Admin privileges required."
+msgstr "需要管理员权限"
+
+#: searx/botdetection/_helpers.py
+msgid "Too Many Requests"
+msgstr "请求过于频繁"
+
+#: searx/limiter.py
+msgid "IP is on BLOCKLIST - %(msg)s"
+msgstr "IP已被列入黑名单 - %(msg)s"
+
+#: searx/templates/simple/base.html
+msgid "History"
+msgstr "历史记录"
+
+#: searx/templates/simple/base.html
+msgid "Register"
+msgstr "注册"
+
+#: searx/templates/simple/base.html
+msgid "Login"
+msgstr "登录"
+
+#: searx/templates/simple/base.html
+msgid "Logout"
+msgstr "退出登录"
+
+#: searx/templates/simple/history.html
+msgid "Search History"
+msgstr "搜索历史"
+
+#: searx/templates/simple/history.html
+msgid "Clear all history?"
+msgstr "清除所有历史记录？"
+
+#: searx/templates/simple/history.html
+msgid "Clear All"
+msgstr "清除全部"
+
+#: searx/templates/simple/history.html
+msgid "Query"
+msgstr "搜索词"
+
+#: searx/templates/simple/history.html
+msgid "Time"
+msgstr "时间"
+
+#: searx/templates/simple/history.html
+msgid "Action"
+msgstr "操作"
+
+#: searx/templates/simple/history.html
+msgid "Delete"
+msgstr "删除"
+
+#: searx/templates/simple/history.html
+msgid "No search history"
+msgstr "暂无搜索历史"
+
+#: searx/templates/simple/register.html
+msgid "Username"
+msgstr "用户名"
+
+#: searx/templates/simple/register.html
+msgid "Email"
+msgstr "邮箱"
+
+#: searx/templates/simple/register.html
+msgid "Password"
+msgstr "密码"
+
