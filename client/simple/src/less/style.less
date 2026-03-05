@@ -114,7 +114,7 @@ footer {
 }
 
 .page_with_header .logo {
-  height: 40px;
+  height: 80px;
 }
 
 input[type="submit"],
@@ -183,36 +183,11 @@ article[data-vim-selected].category-social {
   padding-bottom: 1.2rem;
   box-sizing: border-box;
   width: 100%;
-  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+  border-bottom: none;
   transition: background-color 0.2s;
 
   &:hover {
-    background-color: var(--md-result-hover-bg);
-  }
-
-  h3 {
-    font-size: var(--md-sys-typescale-title-large-size);
-    line-height: var(--md-sys-typescale-title-large-line-height);
-    font-weight: var(--md-sys-typescale-title-large-weight);
-    overflow-wrap: break-word;
-    margin: 0.2rem 0 0.3rem 0;
-    padding: 0;
-
-    a {
-      color: var(--md-result-title);
-      font-weight: normal;
-
-      &:visited {
-        color: var(--md-result-title-visited);
-      }
-
-      &:focus,
-      &:hover {
-        text-decoration: underline;
-        border: none;
-        outline: none;
-      }
-    }
+    background-color: transparent;
   }
 
   .cache_link,
@@ -252,51 +227,6 @@ article[data-vim-selected].category-social {
     }
   }
 
-  .url_header {
-    display: flex;
-    gap: 0.5rem;
-  }
-
-  .url_wrapper {
-    display: flex;
-    align-items: center;
-    font-size: var(--md-sys-typescale-label-large-size);
-    line-height: var(--md-sys-typescale-label-large-line-height);
-    color: var(--md-result-url);
-    flex-flow: row nowrap;
-    overflow: hidden;
-    margin: 0 0 0.3rem 0;
-    padding: 0;
-
-    .url_o1 {
-      white-space: nowrap;
-      flex-shrink: 1;
-      padding-bottom: 1px;
-
-      .url_i1 {
-        unicode-bidi: plaintext;
-      }
-    }
-
-    .url_o1::after {
-      content: " ";
-      width: 1ch;
-      display: inline-block;
-    }
-
-    .url_o2 {
-      overflow: hidden;
-      white-space: nowrap;
-      flex: 0 1 content;
-      text-align: right;
-      padding-bottom: 1px;
-
-      .url_i2 {
-        float: right;
-      }
-    }
-  }
-
   .published_date,
   .result_length,
   .result_views,
@@ -332,6 +262,108 @@ article[data-vim-selected].category-social {
 
   .break {
     clear: both;
+  }
+
+  // Google-style result layout
+  .result-source {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 4px;
+
+    .url_header {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      text-decoration: none;
+    }
+
+    .favicon {
+      flex-shrink: 0;
+      width: 28px;
+      height: 28px;
+
+      img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+    }
+
+    .source-info {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .source-name {
+      font-size: 14px;
+      color: var(--md-result-text);
+      font-weight: normal;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .url_wrapper {
+      font-size: 12px;
+      color: var(--md-result-text);
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      margin: 0;
+
+      .url_o1 {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .url_o1::after {
+        content: none;
+      }
+
+      .url_o2 {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        &::before {
+          content: " \203A ";  // › character
+          color: var(--md-sys-color-on-surface-variant);
+          margin: 0 4px;
+        }
+      }
+    }
+  }
+
+  .result-title {
+    font-size: 20px;
+    line-height: 1.3;
+    margin: 0 0 8px 0;
+
+    a {
+      color: var(--md-result-title);
+      font-weight: normal;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+
+      &:visited {
+        color: var(--md-result-title-visited);
+      }
+    }
+  }
+
+  .content {
+    .highlight {
+      color: var(--md-result-highlight);
+      background: inherit;
+      font-weight: bold;
+    }
   }
 }
 
